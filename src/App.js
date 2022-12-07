@@ -3,27 +3,31 @@ import axios from "axios"
 import './App.css';
 const App = () => {
   const [data, setData] = useState(null);
-  console.log(data);
   const [name, setName] = useState("");
 
   const changeHandler = (event) => {
+    event.preventDefault();
     const value = event.target.value;
     setName(value);
   }
 
-  const clickHandler = () => {
+  const clickHandler = (event) => {
+    event.preventDefault();
+    if (name === "") {
+      alert("write something");
+    }
     axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=7e4dc5d9621c65a85ad1f36c13575bb9&units=metric`)
       .then((response) => {
-        console.log(response.data)
         setData(response.data)
-        const tmp = {
-          name: data.name,
-          temperature: data.main.temp,
-        }
       })
-      .catch((error) => {console.log(error)})
-  }
+      .catch((error) => { console.log(error.message) })
 
+  }
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      clickHandler()
+    }
+  };
 
   return (
     <div>
@@ -31,16 +35,17 @@ const App = () => {
         <div className="container">
           <h1 className="heading">Weather App</h1>
           <form>
-            <input type="text" placeholder="Search for a city" onChange={changeHandler} />
+            <input type="text" placeholder="Search for a city" onChange={changeHandler} onKeyDown={handleKeyDown} />
             <button onClick={clickHandler}>Search</button>
-            <span className="msg"></span>
+            <span className="msg">
+
+            </span>
           </form>
-          <div>
-            {/* {
-              data.length ?
-              data.map(item =><h3>{item.data.tmp}</h3>) :
-              <h1>Loding....</h1>
-            } */}
+          <br />
+          <div className="data">
+            {
+              data !== null ? <h1 className="h1N">Name: {data.name} , Temperature: {data.main.temp}</h1> : <h1 className="h1T">Loding...</h1>
+            }
           </div>
         </div>
       </div>
