@@ -18,11 +18,16 @@ const App = () => {
     }
     axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=7e4dc5d9621c65a85ad1f36c13575bb9&units=metric`)
       .then((response) => {
+        console.log(1);
         console.log(response);
         setData(response.data)
+        console.log(2);
       })
       .catch((error) => {
+        console.log(3);
+        console.log(error);
         setError(error.response.data.cod);
+        console.log(4);
       })
   }
 
@@ -33,15 +38,15 @@ const App = () => {
         <div className="container">
           <h1 className="heading">Weather App</h1>
           <form>
-            <input type="text" placeholder="Search for a city" onChange={changeHandler}  />
+            <input type="text" placeholder="Search for a city" onChange={changeHandler} />
             <button onClick={clickHandler}>Search</button>
             <div className="msg">
               {
-                error  === "404"  && <span>{error.response.data.message}</span> 
+                error === "404" && <span>{error.response.data.message}</span>
               }
             </div>
           </form>
-          <br/>
+          <br />
           <div className="data">
             {
               data !== null && <h1 className="h1N">Name: {data.name} , Temperature: {data.main.temp}</h1>
